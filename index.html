@@ -65,6 +65,8 @@
     body{animation:none;}
     .hearts span{animation:none; display:none;}
     .stage, .badge, .btn{transition:none !important;}
+    .card, .seal, .art, .art svg, #cover, #letter, .dots span,
+    .badge, .stage p, .stage .quote{animation:none !important; transition:none !important;}
   }
 
   .card{
@@ -77,6 +79,13 @@
     padding:34px 26px 28px;
     box-shadow:0 30px 60px -25px rgba(122,51,71,.35), 0 2px 8px rgba(122,51,71,.08);
     text-align:center;
+    overflow:hidden;
+    animation:cardIn .7s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  @keyframes cardIn{
+    from{ opacity:0; transform:translateY(18px) scale(.97); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
   }
 
   /* ---------- cover ---------- */
@@ -86,20 +95,41 @@
     background:radial-gradient(circle at 35% 30%, var(--rose-300), var(--rose-600));
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 12px 24px -10px rgba(201,78,107,.55);
+    animation:sealBeat 2.6s ease-in-out infinite;
   }
   #cover .seal svg{width:36px; height:36px;}
+
+  @keyframes sealBeat{
+    0%, 100%{ transform:scale(1); box-shadow:0 12px 24px -10px rgba(201,78,107,.55); }
+    50%{ transform:scale(1.06); box-shadow:0 16px 30px -10px rgba(201,78,107,.7); }
+  }
 
   #cover h1{
     font-family:'Noto Naskh Arabic', serif;
     font-size:1.55rem;
     margin:0 0 12px;
     color:var(--rose-600);
+    animation:fadeUp .6s .15s cubic-bezier(.22,1,.36,1) both;
   }
   #cover p{
     font-size:.95rem;
     line-height:1.9;
     color:var(--rose-800);
     margin:0 0 26px;
+    animation:fadeUp .6s .28s cubic-bezier(.22,1,.36,1) both;
+  }
+  #cover .btn{
+    animation:fadeUp .6s .4s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  #cover.leaving{ animation:coverOut .35s ease forwards; }
+  @keyframes coverOut{
+    to{ opacity:0; transform:scale(.94) translateY(-6px); }
   }
 
   /* ---------- shared button ---------- */
@@ -122,14 +152,28 @@
     transition:transform .18s ease, box-shadow .18s ease;
   }
   .btn:hover{ transform:translateY(-2px); box-shadow:0 18px 30px -14px rgba(201,78,107,.85); }
-  .btn:active{ transform:translateY(0); }
+  .btn:hover svg{ transform:translateX(-4px); }
+  .btn:active{ transform:translateY(0) scale(.98); }
   .btn.restart{ background:linear-gradient(135deg,#9a5fc9,var(--rose-600)); }
-  .btn svg{width:18px; height:18px; flex-shrink:0;}
+  .btn svg{width:18px; height:18px; flex-shrink:0; transition:transform .25s ease;}
+  .btn.restart:hover svg{ transform:rotate(-50deg); }
 
   /* ---------- letter view ---------- */
   #letter{ display:none; }
-  #letter.active{ display:block; }
+  #letter.active{ display:block; animation:letterIn .45s .05s cubic-bezier(.22,1,.36,1) both; }
   #cover.hidden{ display:none; }
+
+  @keyframes letterIn{
+    from{ opacity:0; transform:translateY(14px) scale(.98); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  #letter.leaving{
+    animation:none;
+    transition:opacity .26s ease, transform .26s ease;
+    opacity:0;
+    transform:scale(.96) translateY(-6px);
+  }
 
   .art{
     width:180px; height:180px;
@@ -139,13 +183,22 @@
     display:flex; align-items:center; justify-content:center;
     position:relative;
     overflow:hidden;
+    transition:background .45s ease;
   }
   .art::after{
     content:'';
     position:absolute; inset:0;
     background:radial-gradient(circle at 50% 15%, rgba(255,255,255,.55), transparent 60%);
   }
-  .art svg{ width:104px; height:104px; position:relative; z-index:1; }
+  .art svg{
+    width:104px; height:104px; position:relative; z-index:1;
+    animation:artPop .5s cubic-bezier(.22,1.4,.36,1) both;
+  }
+
+  @keyframes artPop{
+    from{ opacity:0; transform:scale(.75) translateY(6px); }
+    to{ opacity:1; transform:scale(1) translateY(0); }
+  }
 
   .badge{
     display:inline-block;
@@ -157,6 +210,7 @@
     color:var(--rose-600);
     font-weight:700;
     font-size:.92rem;
+    animation:fadeUp .45s .08s cubic-bezier(.22,1,.36,1) both;
   }
 
   .stage p{
@@ -164,6 +218,7 @@
     line-height:1.95;
     color:var(--rose-800);
     margin:0 0 14px;
+    animation:fadeUp .45s .14s cubic-bezier(.22,1,.36,1) both;
   }
 
   .stage .quote{
@@ -175,6 +230,18 @@
     font-size:.96rem;
     line-height:1.85;
     margin:0 0 14px;
+    animation:fadeUp .45s .2s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  .stage p#p2{ animation-delay:.26s; }
+
+  /* outgoing state applied just before a slide swap */
+  .stage.leaving p, .stage.leaving .quote,
+  .leaving .badge, .leaving .art svg{
+    animation:none !important;
+    transition:opacity .18s ease, transform .18s ease;
+    opacity:0 !important;
+    transform:translateY(-8px) !important;
   }
 
   .dots{
@@ -184,10 +251,16 @@
   .dots span{
     width:7px; height:7px; border-radius:50%;
     background:var(--rose-300);
-    transition:all .25s ease;
+    transition:all .3s cubic-bezier(.22,1,.36,1);
   }
   .dots span.on{
     width:20px; background:var(--rose-600);
+    animation:dotPop .3s cubic-bezier(.22,1.6,.36,1);
+  }
+
+  @keyframes dotPop{
+    from{ transform:scaleY(.4); }
+    to{ transform:scaleY(1); }
   }
 </style>
 </head>
@@ -202,7 +275,7 @@
     <div class="seal">
       <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-10-9.1C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.4C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.9 19.5 16.4 12 21 12 21z"/></svg>
     </div>
-    <h1>نامەیەکی نهێنی بۆ تۆیە</h1>
+    <h1>نامەیەکی نهێنی بۆ خۆشەویستی ژیانم</h1>
     <p>پێش ئەوەی بیکەیتەوە، هەناسەیەک هەڵمژە... چەند وشەیەک لە دڵەوە نووسراون، تەنها بۆ تۆ.</p>
     <button class="btn" onclick="openLetter()">
       بیکەرەوە
@@ -302,6 +375,8 @@ function coupleSVG(){
   </svg>`;
 }
 
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function render(){
   const s = slides[i];
   $('art').style.setProperty('--art-a', s.a);
@@ -323,20 +398,58 @@ function render(){
 }
 
 function openLetter(){
-  $('cover').classList.add('hidden');
-  $('letter').classList.add('active');
-  i = 0;
-  render();
+  const cover = $('cover');
+  if(reduceMotion){
+    cover.classList.add('hidden');
+    $('letter').classList.add('active');
+    i = 0; render();
+    return;
+  }
+  cover.classList.add('leaving');
+  setTimeout(() => {
+    cover.classList.add('hidden');
+    cover.classList.remove('leaving');
+    $('letter').classList.add('active');
+    i = 0;
+    render();
+  }, 320);
 }
 
 function next(){
-  if(slides[i].restart){
-    $('letter').classList.remove('active');
-    $('cover').classList.remove('hidden');
+  const goRestart = !!slides[i].restart;
+
+  if(reduceMotion){
+    if(goRestart){
+      $('letter').classList.remove('active');
+      $('cover').classList.remove('hidden');
+    } else {
+      i = Math.min(i + 1, slides.length - 1);
+      render();
+    }
     return;
   }
-  i = Math.min(i + 1, slides.length - 1);
-  render();
+
+  if(goRestart){
+    $('letter').classList.add('leaving');
+    setTimeout(() => {
+      $('letter').classList.remove('active', 'leaving');
+      $('cover').classList.remove('hidden');
+    }, 260);
+    return;
+  }
+
+  const stage = document.querySelector('.stage');
+  stage.classList.add('leaving');
+  $('badge').classList.add('leaving');
+  $('art').classList.add('leaving');
+
+  setTimeout(() => {
+    i = Math.min(i + 1, slides.length - 1);
+    render();
+    stage.classList.remove('leaving');
+    $('badge').classList.remove('leaving');
+    $('art').classList.remove('leaving');
+  }, 190);
 }
 
 // ambient floating hearts
