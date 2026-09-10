@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نامەیەکی نهێنی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose-950:#3d1f28;
+    --rose-800:#7a3347;
+    --rose-600:#c94e6b;
+    --rose-500:#e2637e;
+    --rose-300:#f3a9bb;
+    --rose-100:#fbdfe6;
+    --cream:#fff8f5;
+    --lav:#efe3f2;
+    --gold:#d9a441;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Noto Sans Arabic', sans-serif;
+    color:var(--rose-950);
+    overflow-x:hidden;
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:28px 16px;
+    background:linear-gradient(160deg,#fbe3ea,#f6e6ef 45%,#eee2f0 100%);
+    background-size:200% 200%;
+    animation:driftBG 18s ease-in-out infinite;
+    position:relative;
+  }
+
+  @keyframes driftBG{
+    0%,100%{background-position:0% 20%;}
+    50%{background-position:100% 80%;}
+  }
+
+  /* ambient floating hearts */
+  .hearts{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .hearts span{
+    position:absolute;
+    bottom:-10%;
+    font-size:18px;
+    color:var(--rose-300);
+    opacity:.55;
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    to{ transform:translateY(-120vh) translateX(var(--drift,20px)) rotate(20deg); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body{animation:none;}
+    .hearts span{animation:none; display:none;}
+    .stage, .badge, .btn{transition:none !important;}
+  }
+
+  .card{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:380px;
+    background:var(--cream);
+    border-radius:28px;
+    padding:34px 26px 28px;
+    box-shadow:0 30px 60px -25px rgba(122,51,71,.35), 0 2px 8px rgba(122,51,71,.08);
+    text-align:center;
+  }
+
+  /* ---------- cover ---------- */
+  #cover .seal{
+    width:88px; height:88px; margin:6px auto 22px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--rose-300), var(--rose-600));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 24px -10px rgba(201,78,107,.55);
+  }
+  #cover .seal svg{width:36px; height:36px;}
+
+  #cover h1{
+    font-family:'Noto Naskh Arabic', serif;
+    font-size:1.55rem;
+    margin:0 0 12px;
+    color:var(--rose-600);
+  }
+  #cover p{
+    font-size:.95rem;
+    line-height:1.9;
+    color:var(--rose-800);
+    margin:0 0 26px;
+  }
+
+  /* ---------- shared button ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    justify-content:center;
+    width:100%;
+    padding:15px 18px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(135deg, var(--rose-500), var(--rose-600));
+    color:#fff;
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 14px 26px -14px rgba(201,78,107,.75);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 18px 30px -14px rgba(201,78,107,.85); }
+  .btn:active{ transform:translateY(0); }
+  .btn.restart{ background:linear-gradient(135deg,#9a5fc9,var(--rose-600)); }
+  .btn svg{width:18px; height:18px; flex-shrink:0;}
+
+  /* ---------- letter view ---------- */
+  #letter{ display:none; }
+  #letter.active{ display:block; }
+  #cover.hidden{ display:none; }
+
+  .art{
+    width:180px; height:180px;
+    margin:0 auto 20px;
+    border-radius:20px;
+    background:linear-gradient(160deg,var(--art-a,#fce3ea),var(--art-b,#f3cdd9));
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .art::after{
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 50% 15%, rgba(255,255,255,.55), transparent 60%);
+  }
+  .art svg{ width:104px; height:104px; position:relative; z-index:1; }
+
+  .badge{
+    display:inline-block;
+    margin:0 auto 16px;
+    padding:8px 20px;
+    border-radius:999px;
+    background:var(--rose-100);
+    border:1px solid var(--rose-300);
+    color:var(--rose-600);
+    font-weight:700;
+    font-size:.92rem;
+  }
+
+  .stage p{
+    font-size:.95rem;
+    line-height:1.95;
+    color:var(--rose-800);
+    margin:0 0 14px;
+  }
+
+  .stage .quote{
+    background:var(--rose-100);
+    border-radius:14px;
+    padding:12px 14px;
+    font-weight:700;
+    color:var(--rose-600);
+    font-size:.96rem;
+    line-height:1.85;
+    margin:0 0 14px;
+  }
+
+  .dots{
+    display:flex; gap:7px; justify-content:center;
+    margin:22px 0 20px;
+  }
+  .dots span{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--rose-300);
+    transition:all .25s ease;
+  }
+  .dots span.on{
+    width:20px; background:var(--rose-600);
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts" aria-hidden="true"></div>
+
+<div class="card">
+
+  <!-- cover / envelope screen -->
+  <div id="cover">
+    <div class="seal">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-10-9.1C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.4C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.9 19.5 16.4 12 21 12 21z"/></svg>
+    </div>
+    <h1>نامەیەکی نهێنی بۆ تۆیە</h1>
+    <p>پێش ئەوەی بیکەیتەوە، هەناسەیەک هەڵمژە... چەند وشەیەک لە دڵەوە نووسراون، تەنها بۆ تۆ.</p>
+    <button class="btn" onclick="openLetter()">
+      بیکەرەوە
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- letter / slides screen -->
+  <div id="letter">
+    <div class="art" id="art"></div>
+    <div class="badge" id="badge"></div>
+    <div class="stage">
+      <p id="p1"></p>
+      <div class="quote" id="quote"></div>
+      <p id="p2"></p>
+    </div>
+    <div class="dots" id="dots"></div>
+    <button class="btn" id="nextBtn" onclick="next()"></button>
+  </div>
+
+</div>
+
+<script>
+const slides = [
+  {
+    badge: "یەکەم هەنگاو",
+    p1: "هەندێک ڕووداو بچووکن، بەڵام هەموو شتێک دەگۆڕن. بینینی تۆ یەکێک بوو لەوانە.",
+    quote: "لەو ساتەوەختەوە، سەرنجم بەرەو تۆ ڕۆیشت و هەرگیز نەگەڕایەوە.",
+    p2: "هەموو وشەیەک کە پاشان نووسیومە، لەو یەکەم هەنگاوەوە دەستی پێکرد.",
+    btn: "بەردەوامبە",
+    a: "#fbe1e8", b: "#f3c3d3"
+  },
+  {
+    badge: "بەهاری هەست",
+    p1: "دڵ کاتێک خۆی دەکاتەوە کە کەس هەستی پێ بکات بەبێ ئەوەی داوای بکات.",
+    quote: "تۆ بەبێ زانین، بەهاری هەموو ڕۆژە سارەکانم بوویت.",
+    p2: "هەر وشەیەکی تۆ، وەک تیشکی خۆرێک بوو بۆ گیانێکی ماندوو.",
+    btn: "زیاتر بخوێنەرەوە",
+    a: "#f8e6d8", b: "#f0cfa8"
+  },
+  {
+    badge: "دیمەنی دڵ",
+    p1: "ڕۆژانێک هەن کە خۆیان دووبارە ناکەنەوە، بەڵام وێنایان لە دڵدا دەمێنێتەوە.",
+    quote: "کاتێک تۆ دەڕوانیت، دڵم بە زمانێکی تر دەدوێت.",
+    p2: "ئەو دیمەنە هێشتا لەلای منن، وەک تابلۆیەکی هەرگیز کۆن نەبووە.",
+    btn: "دواتر",
+    a: "#e7e3f5", b: "#cbc0ea"
+  },
+  {
+    badge: "خەونی شەو",
+    p1: "هەندێک شەو درێژن، بەڵام یادی تۆ کورتیان دەکاتەوە.",
+    quote: "لەناو هەموو ئەستێرەکاندا، تەنها ناوی تۆم لە دڵدا دەخوێنمەوە.",
+    p2: "خەونەکانم، بێ ئاگابوونی خۆم، ڕێگایان بەرەو تۆ دەکەن.",
+    btn: "بەردەوامبە",
+    a: "#e0e9f5", b: "#bcd3ec"
+  },
+  {
+    badge: "پەناگای گیان",
+    p1: "لە ناو هەموو شوێنەکانی دنیا، هەندێک شوێن هەن کە هێمنیت تێدا دەدۆزیتەوە.",
+    quote: "تۆ ئەو پەناگایەیت کە دڵم پێی داوای ئارامی دەکات.",
+    p2: "لای تۆ، هیچ شتێک نامەوێت جگە لە بەردەوامبوون.",
+    btn: "زیاتر",
+    a: "#f6e0dc", b: "#eab7ad"
+  },
+  {
+    badge: "پەیمانی دڵ",
+    p1: "پەیمان بە قسە نابێت بەڵکو بە کردەوە. من هەڵدەبژێرم هەموو ڕۆژێک تۆ هەڵبژێرم.",
+    quote: "بۆ هەموو ساتەکانی داهاتوو، من لەلای تۆم — بە بێ مەرج.",
+    p2: "ئەمە پەیمانێکی سادەیە، بەڵام لە دڵێکی پڕەوە دێت.",
+    btn: "کۆتا وشەکان",
+    a: "#f0e2ea", b: "#dcb9cf"
+  },
+  {
+    badge: "هەتاهەتایی",
+    p1: "نامەکە لێرە کۆتایی دێت، بەڵام هەستەکەی نا.",
+    quote: "تۆ نەک تەنها ڕۆژێکی خۆش، بەڵکو ژیانێکی تەواویت کە هەڵمبژاردووە.",
+    p2: "سوپاس بۆ ئەوەی هەیت. سوپاس بۆ ئەوەی خۆتیت.",
+    btn: "دووبارە بیبینەوە",
+    a: "#efdff0", b: "#d9b7de",
+    restart: true
+  }
+];
+
+let i = 0;
+const $ = id => document.getElementById(id);
+
+function heartSVG(){
+  return '<svg viewBox="0 0 24 24" fill="var(--rose-600)"><path d="M12 21s-7.5-4.6-10-9.1C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.4C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.9 19.5 16.4 12 21 12 21z"/></svg>';
+}
+function coupleSVG(){
+  return `<svg viewBox="0 0 120 120" fill="none">
+    <circle cx="44" cy="38" r="14" fill="var(--rose-600)"/>
+    <path d="M24 96c0-18 9-30 20-30s20 12 20 30" fill="var(--rose-600)"/>
+    <circle cx="78" cy="40" r="13" fill="var(--rose-800)" opacity=".85"/>
+    <path d="M60 96c0-17 8-28 18-28s18 11 18 28" fill="var(--rose-800)" opacity=".85"/>
+    <path d="M58 30c2-6 9-6 11 0-1 5-5 8-5.5 10-.5-2-4.5-5-5.5-10z" fill="#e2637e"/>
+  </svg>`;
+}
+
+function render(){
+  const s = slides[i];
+  $('art').style.setProperty('--art-a', s.a);
+  $('art').style.setProperty('--art-b', s.b);
+  $('art').innerHTML = coupleSVG();
+  $('badge').textContent = s.badge;
+  $('p1').textContent = s.p1;
+  $('quote').textContent = s.quote;
+  $('p2').textContent = s.p2;
+
+  const dots = slides.map((_, idx) => `<span class="${idx===i?'on':''}"></span>`).join('');
+  $('dots').innerHTML = dots;
+
+  const btn = $('nextBtn');
+  btn.classList.toggle('restart', !!s.restart);
+  btn.innerHTML = s.restart
+    ? `${s.btn} <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 4v6h6M20 20v-6h-6"/><path d="M5.5 9A7.5 7.5 0 1119 15"/></svg>`
+    : `${s.btn} <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>`;
+}
+
+function openLetter(){
+  $('cover').classList.add('hidden');
+  $('letter').classList.add('active');
+  i = 0;
+  render();
+}
+
+function next(){
+  if(slides[i].restart){
+    $('letter').classList.remove('active');
+    $('cover').classList.remove('hidden');
+    return;
+  }
+  i = Math.min(i + 1, slides.length - 1);
+  render();
+}
+
+// ambient floating hearts
+(function seedHearts(){
+  const box = $('hearts');
+  const count = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 10;
+  for(let n=0; n<count; n++){
+    const el = document.createElement('span');
+    el.innerHTML = heartSVG();
+    el.style.left = Math.random()*100 + '%';
+    el.style.setProperty('--drift', (Math.random()*60-30) + 'px');
+    el.style.animationDuration = (9 + Math.random()*8) + 's';
+    el.style.animationDelay = (Math.random()*10) + 's';
+    el.style.fontSize = (12 + Math.random()*10) + 'px';
+    el.firstChild.style.width = el.firstChild.style.height = (12 + Math.random()*10) + 'px';
+    box.appendChild(el);
+  }
+})();
+</script>
+</body>
+</html>
